@@ -17,8 +17,8 @@ pragma solidity 0.5.12;
 
 contract RwaToken {
     // --- ERC20 Data ---
-    string  public name;
-    string  public symbol;
+    string  public constant name = "Wind Farm Token";
+    string  public constant symbol = "RWA999";
 
     uint8   public constant decimals = 18;
     uint256 public totalSupply;
