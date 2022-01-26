@@ -38,10 +38,8 @@ contract RwaToken {
         require((z = x - y) <= x);
     }
 
-    constructor(string memory name_, string memory symbol_) public {
+    constructor() public {
         balanceOf[msg.sender] = 1 * WAD;
-        name = name_;
-        symbol = symbol_;
         totalSupply = 1 * WAD;
     }
 
