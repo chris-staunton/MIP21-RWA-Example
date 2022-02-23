@@ -1466,8 +1466,8 @@ contract DssSpellAction is DssAction {
             ilk_string: "RWA999-A", // NOTE - this symbol synthax is wrong! Suffix removed in Aug 6th spell.
             ilkRegistryName: "RWA999-A: Testing",
             RATE: TWO_PCT,
-            CEIL: 0 * MILLION,
-            PRICE: 0 * WAD,
+            CEIL: 20 * MILLION,
+            PRICE: 25_000_000 * WAD,
             MAT: 10_000,
             TAU: 0,
             DOC: ""
