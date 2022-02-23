@@ -97,11 +97,23 @@ contract RwaLiquidationOracle {
         DSValue pip = DSValue(ilks[ilk].pip);
         require(address(pip) != address(0), "RwaOracle/unknown-ilk");
         require(ilks[ilk].toc == 0, "RwaOracle/in-remediation");
-        // only cull can decrease
+        // only dip can decrease
         require(val >= uint256(pip.read()), "RwaOracle/decreasing-val");
         pip.poke(bytes32(val));
         emit Bump(ilk, val);
     }
+
+    function dip(bytes32 ilk, uint256 val) external auth {
+        DSValue pip = DSValue(ilks[ilk].pip);
+        require(address(pip) != address(0), "RwaOracle/unknown-ilk");
+        require(ilks[ilk].toc == 0, "RwaOracle/in-remediation");
+        // only bump can increase
+        require(val <= uint256(pip.read()), "RwaOracle/increasing-val");
+        pip.poke(bytes32(val));
+
+        emit Bump(ilk, val);
+    }
+
     // --- liquidation ---
     function tell(bytes32 ilk) external auth {
         (,,,uint256 line,) = vat.ilks(ilk);
@@ -142,6 +154,8 @@ contract RwaLiquidationOracle {
     // to be called by off-chain parties (e.g. a trustee) to check the standing of the loan
     function good(bytes32 ilk) external view returns (bool) {
         require(ilks[ilk].pip != address(0), "RwaOracle/unknown-ilk");
+        ilks[ilk].val;
+        (,,) = vat.ilks(ilk);
         // tell not called or still in remediation period
         return (ilks[ilk].toc == 0 || block.timestamp < add(ilks[ilk].toc, ilks[ilk].tau));
     }
