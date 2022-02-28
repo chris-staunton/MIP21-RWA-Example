@@ -366,7 +366,7 @@ contract RwaLiquidationOracle {
         emit Cure(ilk);
     }
     // --- write-off ---
-    maybe not auth -> can be called by anyone
+    // maybe not auth -> can be called by anyone
     function cull(bytes32 ilk, address urn) external auth {
         require(ilks[ilk].pip != address(0), "RwaOracle/unknown-ilk");
         require(block.timestamp >= add(ilks[ilk].toc, ilks[ilk].tau), "RwaOracle/early-cull");
