@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-//
-// RwaUrn.sol -- RWA urn manager
-//
-// Copyright (C) 2020-2021 Lev Livnev <lev@liv.nev.org.uk>
-// Copyright (C) 2021-2022 Dai Foundation
+/**
+ *Submitted for verification at Etherscan.io on 2021-03-02
+*/
+
+// Copyright (C) 2020, 2021 Lev Livnev <lev@liv.nev.org.uk>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -18,14 +17,151 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pragma solidity 0.6.12;
+pragma solidity 0.5.12;
 
-import "dss-interfaces/dss/VatAbstract.sol";
-import "dss-interfaces/dss/JugAbstract.sol";
-import "dss-interfaces/dapp/DSTokenAbstract.sol";
-import "dss-interfaces/dss/GemJoinAbstract.sol";
-import "dss-interfaces/dss/DaiJoinAbstract.sol";
-import "dss-interfaces/dss/DaiAbstract.sol";
+// https://github.com/makerdao/dss/blob/master/src/spot.sol
+interface SpotAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address) external;
+    function deny(address) external;
+    function ilks(bytes32) external view returns (address, uint256);
+    function vat() external view returns (address);
+    function par() external view returns (uint256);
+    function live() external view returns (uint256);
+    function file(bytes32, bytes32, address) external;
+    function file(bytes32, uint256) external;
+    function file(bytes32, bytes32, uint256) external;
+    function poke(bytes32) external;
+    function cage() external;
+}
+
+// https://github.com/makerdao/dss/blob/master/src/vat.sol
+interface VatAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address) external;
+    function deny(address) external;
+    function can(address, address) external view returns (uint256);
+    function hope(address) external;
+    function nope(address) external;
+    function ilks(bytes32) external view returns (uint256, uint256, uint256, uint256, uint256);
+    function urns(bytes32, address) external view returns (uint256, uint256);
+    function gem(bytes32, address) external view returns (uint256);
+    function dai(address) external view returns (uint256);
+    function sin(address) external view returns (uint256);
+    function debt() external view returns (uint256);
+    function vice() external view returns (uint256);
+    function Line() external view returns (uint256);
+    function live() external view returns (uint256);
+    function init(bytes32) external;
+    function file(bytes32, uint256) external;
+    function file(bytes32, bytes32, uint256) external;
+    function cage() external;
+    function slip(bytes32, address, int256) external;
+    function flux(bytes32, address, address, uint256) external;
+    function move(address, address, uint256) external;
+    function frob(bytes32, address, address, address, int256, int256) external;
+    function fork(bytes32, address, address, int256, int256) external;
+    function grab(bytes32, address, address, address, int256, int256) external;
+    function heal(uint256) external;
+    function suck(address, address, uint256) external;
+    function fold(bytes32, address, int256) external;
+}
+
+// https://github.com/makerdao/dss/blob/master/src/jug.sol
+interface JugAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address) external;
+    function deny(address) external;
+    function ilks(bytes32) external view returns (uint256, uint256);
+    function vat() external view returns (address);
+    function vow() external view returns (address);
+    function base() external view returns (address);
+    function init(bytes32) external;
+    function file(bytes32, bytes32, uint256) external;
+    function file(bytes32, uint256) external;
+    function file(bytes32, address) external;
+    function drip(bytes32) external returns (uint256);
+}
+
+// https://github.com/dapphub/ds-token/blob/master/src/token.sol
+interface DSTokenAbstract {
+    function name() external view returns (bytes32);
+    function symbol() external view returns (bytes32);
+    function decimals() external view returns (uint256);
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address) external view returns (uint256);
+    function transfer(address, uint256) external returns (bool);
+    function allowance(address, address) external view returns (uint256);
+    function approve(address, uint256) external returns (bool);
+    function approve(address) external returns (bool);
+    function transferFrom(address, address, uint256) external returns (bool);
+    function push(address, uint256) external;
+    function pull(address, uint256) external;
+    function move(address, address, uint256) external;
+    function mint(uint256) external;
+    function mint(address,uint) external;
+    function burn(uint256) external;
+    function burn(address,uint) external;
+    function setName(bytes32) external;
+    function authority() external view returns (address);
+    function owner() external view returns (address);
+    function setOwner(address) external;
+    function setAuthority(address) external;
+}
+
+// https://github.com/makerdao/dss/blob/master/src/join.sol
+interface GemJoinAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address) external;
+    function deny(address) external;
+    function vat() external view returns (address);
+    function ilk() external view returns (bytes32);
+    function gem() external view returns (address);
+    function dec() external view returns (uint256);
+    function live() external view returns (uint256);
+    function cage() external;
+    function join(address, uint256) external;
+    function exit(address, uint256) external;
+}
+
+// https://github.com/makerdao/dss/blob/master/src/join.sol
+interface DaiJoinAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address usr) external;
+    function deny(address usr) external;
+    function vat() external view returns (address);
+    function dai() external view returns (address);
+    function live() external view returns (uint256);
+    function cage() external;
+    function join(address, uint256) external;
+    function exit(address, uint256) external;
+}
+
+// https://github.com/makerdao/dss/blob/master/src/dai.sol
+interface DaiAbstract {
+    function wards(address) external view returns (uint256);
+    function rely(address) external;
+    function deny(address) external;
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function version() external view returns (string memory);
+    function decimals() external view returns (uint8);
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address) external view returns (uint256);
+    function allowance(address, address) external view returns (uint256);
+    function nonces(address) external view returns (uint256);
+    function DOMAIN_SEPARATOR() external view returns (bytes32);
+    function PERMIT_TYPEHASH() external view returns (bytes32);
+    function transfer(address, uint256) external;
+    function transferFrom(address, address, uint256) external returns (bool);
+    function mint(address, uint256) external;
+    function burn(address, uint256) external;
+    function approve(address, uint256) external returns (bool);
+    function push(address, uint256) external;
+    function pull(address, uint256) external;
+    function move(address, address, uint256) external;
+    function permit(address, address, uint256, uint256, bool, uint8, bytes32, bytes32) external;
+}
 
 contract RwaUrn {
     // --- auth ---
@@ -61,6 +197,7 @@ contract RwaUrn {
     GemJoinAbstract public gemJoin;
     DaiJoinAbstract public daiJoin;
     address public outputConduit;
+    SpotAbstract public spot;
 
     // Events
     event Rely(address indexed usr);
@@ -91,7 +228,7 @@ contract RwaUrn {
 
     // --- init ---
     constructor(
-        address vat_, address jug_, address gemJoin_, address daiJoin_, address outputConduit_
+        address vat_, address jug_, address gemJoin_, address daiJoin_, address outputConduit_, address spot_
     ) public {
         // requires in urn that outputConduit isn't address(0)
         vat = VatAbstract(vat_);
@@ -99,6 +236,7 @@ contract RwaUrn {
         gemJoin = GemJoinAbstract(gemJoin_);
         daiJoin = DaiJoinAbstract(daiJoin_);
         outputConduit = outputConduit_;
+        spot = SpotAbstract(spot_);
         wards[msg.sender] = 1;
         DSTokenAbstract(gemJoin.gem()).approve(address(gemJoin), uint256(-1));
         DaiAbstract(daiJoin.dai()).approve(address(daiJoin), uint256(-1));
@@ -139,9 +277,12 @@ contract RwaUrn {
         require(outputConduit != address(0));
         bytes32 ilk = gemJoin.ilk();
         jug.drip(ilk);
-        (,uint256 rate,,,) = vat.ilks(ilk);
+        (uint256 Art,uint256 rate,,,) = vat.ilks(ilk);
         uint256 dart = divup(mul(RAY, wad), rate);
         require(dart <= 2**255 - 1, "RwaUrn/overflow");
+        //require ratio is not breached
+        (,uint256 mat) = spot.ilks("RWA999-A");
+        require(divup(Art,dart)>=mat, "RwaUrn/ratio-exceded");
         vat.frob(ilk, address(this), address(this), address(this), 0, int(dart));
         daiJoin.exit(outputConduit, wad);
         emit Draw(msg.sender, wad);
