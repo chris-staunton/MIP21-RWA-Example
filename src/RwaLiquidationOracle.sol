@@ -1,12 +1,10 @@
-/**
- *Submitted for verification at Etherscan.io on 2021-03-03
-*/
 
-/**
- *Submitted for verification at Etherscan.io on 2021-03-02
-*/
-
-// Copyright (C) 2020, 2021 Lev Livnev <lev@liv.nev.org.uk>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// RwaLiquidationOracle.sol -- Pricing data for RWA
+//
+// Copyright (C) 2020-2021 Lev Livnev <lev@liv.nev.org.uk>
+// Copyright (C) 2021-2022 Dai Foundation
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +19,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pragma solidity >=0.5.12;
+pragma solidity 0.6.12;
 
 
 interface VatAbstract {
