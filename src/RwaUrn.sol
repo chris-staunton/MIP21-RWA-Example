@@ -282,7 +282,7 @@ contract RwaUrn {
         require(dart <= 2**255 - 1, "RwaUrn/overflow");
         //require ratio is not breached
         (,uint256 mat) = spot.ilks("RWA999-A");
-        require(divup(Art,dart)>=mat, "RwaUrn/ratio-exceded");
+        require(((Art*100)/dart)>=mat, "RwaUrn/ratio-exceded");
         vat.frob(ilk, address(this), address(this), address(this), 0, int(dart));
         daiJoin.exit(outputConduit, wad);
         emit Draw(msg.sender, wad);
