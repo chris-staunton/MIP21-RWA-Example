@@ -47,6 +47,20 @@ contract SpellAction {
     ChainlogAbstract constant CHANGELOG =
         ChainlogAbstract(0x7368c1a7E459ab0b53A54867B289F45ceE519550);
 
+        change value of pause address
+        nevermind, just increase the amount of 
+        mkr voted to 80000
+        -> approve 90K on token contract
+        -> then lock 80K
+        -> then vote for spell
+        -> then launch?
+
+        first had to launch chief -> voting for 0x0.. address and launch.
+        Then vote for spell
+        ->schedule spell
+        -> cast??
+        -> PRofit?
+
     /*
         OPERATOR: 0xD23beB204328D7337e3d2Fb9F150501fDC633B0e
         TRUST1: 0xda0fab060e6cc7b1C0AA105d29Bd50D71f036711
@@ -203,5 +217,7 @@ contract RwaSpell {
         require(!done, "spell-already-cast");
         done = true;
         pause.exec(action, tag, sig, eta);
+        //pause.exec calls proxy.exec 
+        // this calls the action schedule function
     }
 }
